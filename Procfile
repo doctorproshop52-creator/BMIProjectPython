@@ -1,1 +1,1 @@
-web: gunicorn app:app
+web: gunicorn bmi_client:app
