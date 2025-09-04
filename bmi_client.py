@@ -20,7 +20,8 @@ HTML_FORM = """
 
       <input type="submit" value="Calculate BMI">
     </form>
-    {% if bmi %}
+
+    {% if bmi is not none %}
       <h2>Your BMI: {{ bmi }}</h2>
       <h3>Category: {{ category }}</h3>
     {% endif %}
@@ -30,7 +31,8 @@ HTML_FORM = """
 
 @app.route("/", methods=["GET"])
 def index():
-    return render_template_string(HTML_FORM)
+    # Always pass bmi and category to avoid template issues
+    return render_template_string(HTML_FORM, bmi=None, category=None)
 
 @app.route("/bmi", methods=["POST"])
 def bmi():
@@ -51,7 +53,3 @@ def bmi():
         return render_template_string(HTML_FORM, bmi=bmi, category=category)
     except Exception as e:
         return jsonify({"error": str(e)})
-
-if __name__ == "__main__":
-    # Important: set host='0.0.0.0' so ngrok can forward traffic
-    app.run(host="0.0.0.0", port=5000, debug=True)
